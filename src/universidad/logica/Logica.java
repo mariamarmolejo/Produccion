@@ -98,7 +98,7 @@ public class Logica {
 		for (int columnaj = 0; columnaj < datos[0].length; columnaj++) {
 			double temp1 = resultados[1][columnaj];
 			double temp2 = resultados[2][columnaj];
-			if (temp1 <= 0 || temp2 <= 0 || resultados[2][columnaj] <= 0) {
+			if (temp1 <= 0 || temp2 <= 0 || resultados[2][columnaj] <= 0 || resultados[2][columnaj] > periodo) {
 				at1[columnaj] = 0;
 			} else {
 				at1[columnaj] = resultados[1][columnaj] / resultados[2][columnaj];
@@ -121,10 +121,23 @@ public class Logica {
 	// OPERACIÓN 6
 	// Organizar los valores de loa operación 4 (Ahorro por unidad de tiempo P1) De
 	// mayor a menor.
-	double[] barra() {
-		double[] asignamiento = new double[datos[0].length];
-
-		return asignamiento;
+	public List<String> calcularBarra() {
+		List<String> resultadoBarra = new ArrayList<>();
+		List<Double> axut = DoubleStream.of(resultados[3]).boxed().collect(Collectors.toList());
+		Comparator<Double> comparador = Collections.reverseOrder();
+		Collections.sort(axut, comparador);
+		double total = 0;
+		for (int i = 1; i <= resultados[0].length; i++) {
+			for (int j = 0; j < resultados[0].length; j++) {
+				if (i == resultados[4][j] && (total + resultados[2][j]) <= periodo) {
+					total += resultados[2][j];
+					resultadoBarra.add((j+1) + "," + resultados[2][j]+","+ resultados[1][j]);
+					break;
+				}
+			}
+		}
+		
+		return resultadoBarra;
 	}
 
 	public void ordenarLista() {
